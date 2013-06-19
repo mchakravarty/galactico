@@ -1,0 +1,500 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		E7A420491771626200DE4AB3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7A420481771626200DE4AB3 /* Foundation.framework */; };
+		E7A4204B1771626200DE4AB3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7A4204A1771626200DE4AB3 /* CoreGraphics.framework */; };
+		E7A4204D1771626200DE4AB3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7A4204C1771626200DE4AB3 /* UIKit.framework */; };
+		E7A4204F1771626200DE4AB3 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7A4204E1771626200DE4AB3 /* SpriteKit.framework */; };
+		E7A420551771626200DE4AB3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7A420531771626200DE4AB3 /* InfoPlist.strings */; };
+		E7A420571771626200DE4AB3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A420561771626200DE4AB3 /* main.m */; };
+		E7A4205B1771626200DE4AB3 /* GALAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A4205A1771626200DE4AB3 /* GALAppDelegate.m */; };
+		E7A4205E1771626200DE4AB3 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7A4205C1771626200DE4AB3 /* Main_iPhone.storyboard */; };
+		E7A420611771626200DE4AB3 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7A4205F1771626200DE4AB3 /* Main_iPad.storyboard */; };
+		E7A420641771626200DE4AB3 /* GALViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A420631771626200DE4AB3 /* GALViewController.m */; };
+		E7A420671771626200DE4AB3 /* GALMyScene.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A420661771626200DE4AB3 /* GALMyScene.m */; };
+		E7A420691771626200DE4AB3 /* Spaceship.png in Resources */ = {isa = PBXBuildFile; fileRef = E7A420681771626200DE4AB3 /* Spaceship.png */; };
+		E7A4206B1771626200DE4AB3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7A4206A1771626200DE4AB3 /* Images.xcassets */; };
+		E7A420721771626200DE4AB3 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7A420711771626200DE4AB3 /* XCTest.framework */; };
+		E7A420731771626200DE4AB3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7A420481771626200DE4AB3 /* Foundation.framework */; };
+		E7A420741771626200DE4AB3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7A4204C1771626200DE4AB3 /* UIKit.framework */; };
+		E7A4207C1771626200DE4AB3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7A4207A1771626200DE4AB3 /* InfoPlist.strings */; };
+		E7A4207E1771626200DE4AB3 /* GalacticoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A4207D1771626200DE4AB3 /* GalacticoTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E7A420751771626200DE4AB3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E7A4203D1771626200DE4AB3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E7A420441771626200DE4AB3;
+			remoteInfo = Galactico;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		E7A420451771626200DE4AB3 /* Galactico.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Galactico.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E7A420481771626200DE4AB3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		E7A4204A1771626200DE4AB3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		E7A4204C1771626200DE4AB3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		E7A4204E1771626200DE4AB3 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
+		E7A420521771626200DE4AB3 /* Galactico-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Galactico-Info.plist"; sourceTree = "<group>"; };
+		E7A420541771626200DE4AB3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E7A420561771626200DE4AB3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		E7A420581771626200DE4AB3 /* Galactico-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Galactico-Prefix.pch"; sourceTree = "<group>"; };
+		E7A420591771626200DE4AB3 /* GALAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GALAppDelegate.h; sourceTree = "<group>"; };
+		E7A4205A1771626200DE4AB3 /* GALAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GALAppDelegate.m; sourceTree = "<group>"; };
+		E7A4205D1771626200DE4AB3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
+		E7A420601771626200DE4AB3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
+		E7A420621771626200DE4AB3 /* GALViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GALViewController.h; sourceTree = "<group>"; };
+		E7A420631771626200DE4AB3 /* GALViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GALViewController.m; sourceTree = "<group>"; };
+		E7A420651771626200DE4AB3 /* GALMyScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GALMyScene.h; sourceTree = "<group>"; };
+		E7A420661771626200DE4AB3 /* GALMyScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GALMyScene.m; sourceTree = "<group>"; };
+		E7A420681771626200DE4AB3 /* Spaceship.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Spaceship.png; sourceTree = "<group>"; };
+		E7A4206A1771626200DE4AB3 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		E7A420701771626200DE4AB3 /* GalacticoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GalacticoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E7A420711771626200DE4AB3 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		E7A420791771626200DE4AB3 /* GalacticoTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GalacticoTests-Info.plist"; sourceTree = "<group>"; };
+		E7A4207B1771626200DE4AB3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E7A4207D1771626200DE4AB3 /* GalacticoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GalacticoTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E7A420421771626200DE4AB3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E7A4204B1771626200DE4AB3 /* CoreGraphics.framework in Frameworks */,
+				E7A4204D1771626200DE4AB3 /* UIKit.framework in Frameworks */,
+				E7A4204F1771626200DE4AB3 /* SpriteKit.framework in Frameworks */,
+				E7A420491771626200DE4AB3 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E7A4206D1771626200DE4AB3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E7A420721771626200DE4AB3 /* XCTest.framework in Frameworks */,
+				E7A420741771626200DE4AB3 /* UIKit.framework in Frameworks */,
+				E7A420731771626200DE4AB3 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E7A4203C1771626200DE4AB3 = {
+			isa = PBXGroup;
+			children = (
+				E7A420501771626200DE4AB3 /* Galactico */,
+				E7A420771771626200DE4AB3 /* GalacticoTests */,
+				E7A420471771626200DE4AB3 /* Frameworks */,
+				E7A420461771626200DE4AB3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		E7A420461771626200DE4AB3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E7A420451771626200DE4AB3 /* Galactico.app */,
+				E7A420701771626200DE4AB3 /* GalacticoTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E7A420471771626200DE4AB3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E7A420481771626200DE4AB3 /* Foundation.framework */,
+				E7A4204A1771626200DE4AB3 /* CoreGraphics.framework */,
+				E7A4204C1771626200DE4AB3 /* UIKit.framework */,
+				E7A4204E1771626200DE4AB3 /* SpriteKit.framework */,
+				E7A420711771626200DE4AB3 /* XCTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E7A420501771626200DE4AB3 /* Galactico */ = {
+			isa = PBXGroup;
+			children = (
+				E7A420591771626200DE4AB3 /* GALAppDelegate.h */,
+				E7A4205A1771626200DE4AB3 /* GALAppDelegate.m */,
+				E7A4205C1771626200DE4AB3 /* Main_iPhone.storyboard */,
+				E7A4205F1771626200DE4AB3 /* Main_iPad.storyboard */,
+				E7A420621771626200DE4AB3 /* GALViewController.h */,
+				E7A420631771626200DE4AB3 /* GALViewController.m */,
+				E7A420651771626200DE4AB3 /* GALMyScene.h */,
+				E7A420661771626200DE4AB3 /* GALMyScene.m */,
+				E7A420681771626200DE4AB3 /* Spaceship.png */,
+				E7A4206A1771626200DE4AB3 /* Images.xcassets */,
+				E7A420511771626200DE4AB3 /* Supporting Files */,
+			);
+			path = Galactico;
+			sourceTree = "<group>";
+		};
+		E7A420511771626200DE4AB3 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E7A420521771626200DE4AB3 /* Galactico-Info.plist */,
+				E7A420531771626200DE4AB3 /* InfoPlist.strings */,
+				E7A420561771626200DE4AB3 /* main.m */,
+				E7A420581771626200DE4AB3 /* Galactico-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E7A420771771626200DE4AB3 /* GalacticoTests */ = {
+			isa = PBXGroup;
+			children = (
+				E7A4207D1771626200DE4AB3 /* GalacticoTests.m */,
+				E7A420781771626200DE4AB3 /* Supporting Files */,
+			);
+			path = GalacticoTests;
+			sourceTree = "<group>";
+		};
+		E7A420781771626200DE4AB3 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E7A420791771626200DE4AB3 /* GalacticoTests-Info.plist */,
+				E7A4207A1771626200DE4AB3 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E7A420441771626200DE4AB3 /* Galactico */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E7A420811771626200DE4AB3 /* Build configuration list for PBXNativeTarget "Galactico" */;
+			buildPhases = (
+				E7A420411771626200DE4AB3 /* Sources */,
+				E7A420421771626200DE4AB3 /* Frameworks */,
+				E7A420431771626200DE4AB3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Galactico;
+			productName = Galactico;
+			productReference = E7A420451771626200DE4AB3 /* Galactico.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E7A4206F1771626200DE4AB3 /* GalacticoTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E7A420841771626200DE4AB3 /* Build configuration list for PBXNativeTarget "GalacticoTests" */;
+			buildPhases = (
+				E7A4206C1771626200DE4AB3 /* Sources */,
+				E7A4206D1771626200DE4AB3 /* Frameworks */,
+				E7A4206E1771626200DE4AB3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E7A420761771626200DE4AB3 /* PBXTargetDependency */,
+			);
+			name = GalacticoTests;
+			productName = GalacticoTests;
+			productReference = E7A420701771626200DE4AB3 /* GalacticoTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E7A4203D1771626200DE4AB3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = GAL;
+				LastUpgradeCheck = 0500;
+				ORGANIZATIONNAME = "Manuel M T Chakravarty";
+				TargetAttributes = {
+					E7A4206F1771626200DE4AB3 = {
+						TestTargetID = E7A420441771626200DE4AB3;
+					};
+				};
+			};
+			buildConfigurationList = E7A420401771626200DE4AB3 /* Build configuration list for PBXProject "Galactico" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = E7A4203C1771626200DE4AB3;
+			productRefGroup = E7A420461771626200DE4AB3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E7A420441771626200DE4AB3 /* Galactico */,
+				E7A4206F1771626200DE4AB3 /* GalacticoTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E7A420431771626200DE4AB3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E7A420691771626200DE4AB3 /* Spaceship.png in Resources */,
+				E7A4206B1771626200DE4AB3 /* Images.xcassets in Resources */,
+				E7A420611771626200DE4AB3 /* Main_iPad.storyboard in Resources */,
+				E7A4205E1771626200DE4AB3 /* Main_iPhone.storyboard in Resources */,
+				E7A420551771626200DE4AB3 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E7A4206E1771626200DE4AB3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E7A4207C1771626200DE4AB3 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E7A420411771626200DE4AB3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E7A420571771626200DE4AB3 /* main.m in Sources */,
+				E7A420641771626200DE4AB3 /* GALViewController.m in Sources */,
+				E7A4205B1771626200DE4AB3 /* GALAppDelegate.m in Sources */,
+				E7A420671771626200DE4AB3 /* GALMyScene.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E7A4206C1771626200DE4AB3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E7A4207E1771626200DE4AB3 /* GalacticoTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E7A420761771626200DE4AB3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E7A420441771626200DE4AB3 /* Galactico */;
+			targetProxy = E7A420751771626200DE4AB3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		E7A420531771626200DE4AB3 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E7A420541771626200DE4AB3 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		E7A4205C1771626200DE4AB3 /* Main_iPhone.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E7A4205D1771626200DE4AB3 /* Base */,
+			);
+			name = Main_iPhone.storyboard;
+			sourceTree = "<group>";
+		};
+		E7A4205F1771626200DE4AB3 /* Main_iPad.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E7A420601771626200DE4AB3 /* Base */,
+			);
+			name = Main_iPad.storyboard;
+			sourceTree = "<group>";
+		};
+		E7A4207A1771626200DE4AB3 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E7A4207B1771626200DE4AB3 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		E7A4207F1771626200DE4AB3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E7A420801771626200DE4AB3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E7A420821771626200DE4AB3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Galactico/Galactico-Prefix.pch";
+				INFOPLIST_FILE = "Galactico/Galactico-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		E7A420831771626200DE4AB3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Galactico/Galactico-Prefix.pch";
+				INFOPLIST_FILE = "Galactico/Galactico-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		E7A420851771626200DE4AB3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Galactico.app/Galactico";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(SYSTEM_APPS_DIR)/Xcode5-DP.app/Contents/Developer/Library/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Galactico/Galactico-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "GalacticoTests/GalacticoTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		E7A420861771626200DE4AB3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Galactico.app/Galactico";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(SYSTEM_APPS_DIR)/Xcode5-DP.app/Contents/Developer/Library/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Galactico/Galactico-Prefix.pch";
+				INFOPLIST_FILE = "GalacticoTests/GalacticoTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E7A420401771626200DE4AB3 /* Build configuration list for PBXProject "Galactico" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E7A4207F1771626200DE4AB3 /* Debug */,
+				E7A420801771626200DE4AB3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E7A420811771626200DE4AB3 /* Build configuration list for PBXNativeTarget "Galactico" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E7A420821771626200DE4AB3 /* Debug */,
+				E7A420831771626200DE4AB3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		E7A420841771626200DE4AB3 /* Build configuration list for PBXNativeTarget "GalacticoTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E7A420851771626200DE4AB3 /* Debug */,
+				E7A420861771626200DE4AB3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E7A4203D1771626200DE4AB3 /* Project object */;
+}
