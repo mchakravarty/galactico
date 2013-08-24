@@ -3,13 +3,20 @@
 module World (
   Player(..), PlayerId(..), Goods(..), Futures(..), Plan(..), Action(..),
   TileIndex, Tiles, Tile(..),
-  World(..), Prices(..)
+  World(..), Prices(..),
+  initialWorld,
+  playerBounds, tileBounds,
+  noGoods
 ) where
 
   -- standard library
 import Data.Array
 import Data.Int
 import Data.Word
+
+
+-- Data types describing the game state
+-- ------------------------------------
 
 -- Player state
 --
@@ -30,7 +37,7 @@ data Player
 -- The game comprises for players. Every round starts with 'PlayerA's turn, then 'PlayerB's, and so on.
 --
 data PlayerId = PlayerA | PlayerB | PlayerC | PlayerD
-  deriving (Show, Eq, Ord, Enum, Ix)
+  deriving (Show, Eq, Ord, Bounded, Enum, Ix)
 
 -- The quantity of all available kinds of merchandise.
 --
@@ -76,6 +83,7 @@ data Tile
     { ownerT    :: Maybe PlayerId
     , facilityT :: Maybe Facility
       -- FIXME: we need the type of tile it is (some are more suitable for some facilities than others)
+      --        INSTEAD, we might want to store the immutable (during the game) part of the game state separately.
     }
   deriving Show
 
@@ -109,3 +117,54 @@ data Prices
     , specialP :: Word32
     }
   deriving Show
+
+
+-- Common values of game state components
+-- --------------------------------------
+
+-- Initial game world.
+--
+initialWorld :: World
+initialWorld 
+  = World
+    { playersW = array playerBounds [(pid, initialPlayer pid (show pid)) | pid <- range playerBounds]
+    , tilesW   = initialTiles
+    , storageW = noGoods
+    , pricesW  = initialPrices
+    }
+
+playerBounds :: (PlayerId, PlayerId)
+playerBounds = (minBound, maxBound)
+
+initialPlayer :: PlayerId -> String -> Player
+initialPlayer playerId name
+  = Player
+    { idP      = playerId
+    , nameP    = name
+    , creditsP = 100
+    , goodsP   = noGoods
+    , futuresP = noFutures
+    , planP    = noPlan
+    }
+
+noFutures :: Futures
+noFutures = Futures
+
+noPlan :: Plan
+noPlan = Plan [] []
+
+noGoods :: Goods
+noGoods = Goods 0 0 0 0
+
+initialTiles :: Tiles
+initialTiles = listArray tileBounds (repeat initialTile)
+
+tileBounds :: (TileIndex, TileIndex)
+tileBounds = ((0, 0), (7, 4))
+
+initialTile :: Tile
+initialTile
+  = Tile Nothing Nothing
+
+initialPrices :: Prices
+initialPrices = Prices 10 10 10 10
