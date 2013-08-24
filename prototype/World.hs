@@ -75,7 +75,7 @@ data Action
 
 -- The terrain is divided into 8x5 tiles.
 --
-type TileIndex = (Int, Int)
+type TileIndex = (Int, Int)             -- (0, 0) is the upper left corner
 type Tiles     = Array TileIndex Tile
 
 data Tile
@@ -157,7 +157,16 @@ noGoods :: Goods
 noGoods = Goods 0 0 0 0
 
 initialTiles :: Tiles
-initialTiles = listArray tileBounds (repeat initialTile)
+initialTiles = listArray tileBounds (replicate 16 initialTile ++ 
+                                     [playerATile, playerCTile] ++ 
+                                     replicate 3 initialTile ++ 
+                                     [playerBTile, playerDTile] ++ 
+                                     repeat initialTile)
+  where
+    playerATile = initialTile {ownerT = Just PlayerA}
+    playerBTile = initialTile {ownerT = Just PlayerB}
+    playerCTile = initialTile {ownerT = Just PlayerC}
+    playerDTile = initialTile {ownerT = Just PlayerD}
 
 tileBounds :: (TileIndex, TileIndex)
 tileBounds = ((0, 0), (7, 4))
