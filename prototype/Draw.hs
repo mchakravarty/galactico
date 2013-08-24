@@ -28,6 +28,9 @@ tileSize = 128
 hudHeight :: Float
 hudHeight = tileSize
 
+playerHUDWidth :: Float
+playerHUDWidth = tileSize * 2
+
 
 -- Drawing
 -- -------
@@ -37,7 +40,7 @@ draw world
   = return $ Pictures 
              [ Translate 0 (hudHeight / 2)                      $ drawTiles (tilesW world)
              , Translate 0 tileSize $ Scale (1/8) (1/8)         mothership
-             , Translate 0 (- screenHeight / 2 + hudHeight / 2) drawHUD
+             , Translate 0 (- screenHeight / 2 + hudHeight / 2) $ drawHUD (playersW world)
              ]
 
 drawTiles :: Tiles -> Picture
@@ -62,8 +65,20 @@ tileIndexToPoint (i, j) = (fromIntegral i * tileSize - tilesWidth / 2 + 0.5,
     tilesHeight                    = tileSize * fromIntegral vertMaxTile
     (_, (horMaxTile, vertMaxTile)) = tileBounds
 
-drawHUD :: Picture
-drawHUD = Color (greyN 0.3) $ rectangleSolid screenWidth hudHeight
+drawHUD :: Players -> Picture
+drawHUD players 
+  = Pictures 
+    [ Color (greyN 0.6) $ rectangleSolid screenWidth hudHeight
+    , Translate (playerHUDWidth * (-1.5)) 0 $ drawPlayerHUD (players!PlayerA)
+    , Translate (playerHUDWidth * (-0.5)) 0 $ drawPlayerHUD (players!PlayerB)
+    , Translate (playerHUDWidth *   0.5 ) 0 $ drawPlayerHUD (players!PlayerC)
+    , Translate (playerHUDWidth *   1.5 ) 0 $ drawPlayerHUD (players!PlayerD)
+    ]
+
+drawPlayerHUD :: Player -> Picture
+drawPlayerHUD (Player {idP = pid}) 
+  = Color (transparent $ playerColour pid) $
+      rectangleSolid playerHUDWidth hudHeight
 
 
 -- Colours

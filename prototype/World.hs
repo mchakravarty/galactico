@@ -2,7 +2,7 @@
 
 module World (
   Player(..), PlayerId(..), Goods(..), Futures(..), Plan(..), Action(..),
-  TileIndex, Tiles, Tile(..),
+  TileIndex, Tiles, Tile(..), Players,
   World(..), Prices(..),
   initialWorld,
   playerBounds, tileBounds,
@@ -98,9 +98,13 @@ data Facility
   | Factory
   deriving Show
 
+-- All players
+--
+type Players = Array PlayerId Player
+  
 data World
   = World
-    { playersW :: Array PlayerId Player
+    { playersW :: Players
     , tilesW   :: Tiles
     , storageW :: Goods
     , pricesW  :: Prices
