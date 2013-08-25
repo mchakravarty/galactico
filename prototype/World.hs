@@ -105,6 +105,7 @@ type Players = Array PlayerId Player
 data World
   = World
     { playersW :: Players
+    , turnW    :: PlayerId
     , tilesW   :: Tiles
     , storageW :: Goods
     , pricesW  :: Prices
@@ -132,6 +133,7 @@ initialWorld :: World
 initialWorld 
   = World
     { playersW = array playerBounds [(pid, initialPlayer pid (show pid)) | pid <- range playerBounds]
+    , turnW    = PlayerA
     , tilesW   = initialTiles
     , storageW = noGoods
     , pricesW  = initialPrices

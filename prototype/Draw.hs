@@ -40,7 +40,7 @@ draw world
   = return $ Pictures 
              [ Translate 0 (hudHeight / 2)                      $ drawTiles (tilesW world)
              , Translate 0 tileSize $ Scale (1/8) (1/8)         mothership
-             , Translate 0 (- screenHeight / 2 + hudHeight / 2) $ drawHUD (playersW world)
+             , Translate 0 (- screenHeight / 2 + hudHeight / 2) $ drawHUD (turnW world) (playersW world)
              ]
 
 drawTiles :: Tiles -> Picture
@@ -65,20 +65,47 @@ tileIndexToPoint (i, j) = (fromIntegral i * tileSize - tilesWidth / 2 + 0.5,
     tilesHeight                    = tileSize * fromIntegral vertMaxTile
     (_, (horMaxTile, vertMaxTile)) = tileBounds
 
-drawHUD :: Players -> Picture
-drawHUD players 
+-- The first argument is the player whose turn it is.
+--
+drawHUD :: PlayerId -> Players -> Picture
+drawHUD turn players 
   = Pictures 
     [ Color (greyN 0.6) $ rectangleSolid screenWidth hudHeight
-    , Translate (playerHUDWidth * (-1.5)) 0 $ drawPlayerHUD (players!PlayerA)
-    , Translate (playerHUDWidth * (-0.5)) 0 $ drawPlayerHUD (players!PlayerB)
-    , Translate (playerHUDWidth *   0.5 ) 0 $ drawPlayerHUD (players!PlayerC)
-    , Translate (playerHUDWidth *   1.5 ) 0 $ drawPlayerHUD (players!PlayerD)
+    , Translate (playerHUDWidth * (-1.5)) 0 $ drawPlayerHUD turn (players!PlayerA)
+    , Translate (playerHUDWidth * (-0.5)) 0 $ drawPlayerHUD turn (players!PlayerB)
+    , Translate (playerHUDWidth *   0.5 ) 0 $ drawPlayerHUD turn (players!PlayerC)
+    , Translate (playerHUDWidth *   1.5 ) 0 $ drawPlayerHUD turn (players!PlayerD)
     ]
 
-drawPlayerHUD :: Player -> Picture
-drawPlayerHUD (Player {idP = pid}) 
-  = Color (transparent $ playerColour pid) $
-      rectangleSolid playerHUDWidth hudHeight
+-- The first argument is the player whose turn it is.
+--
+drawPlayerHUD :: PlayerId -> Player -> Picture
+drawPlayerHUD turn (Player 
+                    { idP      = pid
+                    , nameP    = name
+                    , creditsP = credits
+                    , goodsP   = Goods 
+                                 { foodG    = food
+                                 , energyG  = energy
+                                 , metalG   = metal
+                                 , specialG = special
+                                 }
+                    }) 
+  = Pictures 
+    [ Color (transparent $ playerColour pid) $
+        rectangleSolid playerHUDWidth hudHeight
+    , if turn == pid then turnIndicator else Blank
+    , Translate (-playerHUDWidth / 2 + 10) 30   $ Scale 0.2 0.2 $ Text ("$" ++ show credits)
+    , Translate 0                          30   $ Scale 0.2 0.2 $ Text name
+    , Translate (-playerHUDWidth / 2 + 10)(-10) $ Scale 0.2 0.2 $ Text ("F" ++ show food  ++ "  E" ++ show energy)
+    , Translate (-playerHUDWidth / 2 + 10)(-40) $ Scale 0.2 0.2 $ Text ("M" ++ show metal ++ "  S" ++ show special)
+    ]
+  where
+    turnIndicator = Pictures
+                    [ Color black $ rectangleWire (playerHUDWidth - 0.5) (hudHeight - 0.5)
+                    , Color black $ rectangleWire (playerHUDWidth - 2.5) (hudHeight - 2.5)
+                    , Color black $ rectangleWire (playerHUDWidth - 4.5) (hudHeight - 4.5)
+                    ]
 
 
 -- Colours

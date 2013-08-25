@@ -9,8 +9,10 @@ import Graphics.Gloss
 import Graphics.Gloss.Interface.IO.Game
 
   -- friends
+import Turn
 import World
 
 
 events :: Event -> World -> IO World
-events _ world = return world
+events (EventKey (SpecialKey KeyEnter) Down _ _) world = endOfTurn world
+events _                                         world = return world
