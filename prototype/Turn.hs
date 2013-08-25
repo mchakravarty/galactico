@@ -6,7 +6,7 @@ module Turn (
 
   -- friends
 import World
-
+import Prelude hiding (round)
 
 -- Turn progression
 -- ----------------
@@ -31,6 +31,24 @@ round :: World -> IO World
 round world 
   = do
     { putStrLn "next round"
+    ; world' <- foldM world turn [PlayerA .. PlayerD]
     ; return world
     }
+  
 
+turn :: PlayerId -> World -> IO World
+turn playerId world 
+  = do
+    { putStrLn $ (show playerId) ++"'s turn"
+    ; return world
+    }  
+
+
+
+foldM :: Monad m => b -> (a -> b -> m b) -> [a] -> m b
+foldM b f [] = return b
+foldM b f (x:xs) 
+  = do 
+  { b' <- f x b 
+  ; foldM b' f xs
+  }
