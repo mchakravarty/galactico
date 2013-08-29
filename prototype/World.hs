@@ -1,20 +1,28 @@
+{-# LANGUAGE TemplateHaskell, Rank2Types, NoMonomorphismRestriction #-}
+{-# LANGUAGE TypeSynonymInstances, FlexibleInstances #-}
+
 -- Data structures encoding the state of the world.
 
-module World (
-  Player(..), PlayerId(..), Goods(..), Futures(..), Plan(..), Action(..),
+module World
+{- (
+  Player(..), PlayerId(..), Goods(..), Futures(..), Plan(..), PlayerAction(..),
   TileIndex, Tiles, Tile(..), Players,
   World(..), Prices(..), Facility (..),
   initialWorld,
   playerBounds, tileBounds,
   noGoods
-) where
+) -} where
+  -- FIXME: make an explicit list including lenses
 
   -- standard library
 import Data.Array
 import Data.Int
 import Data.Word
 
+  -- libraries
+import Control.Lens
 
+  
 -- Data types describing the game state
 -- ------------------------------------
 
@@ -25,12 +33,12 @@ import Data.Word
 --
 data Player 
   = Player 
-    { idP       :: PlayerId
-    , nameP     :: String
-    , creditsP  :: Word32
-    , goodsP    :: Goods
-    , futuresP  :: Futures
-    , planP     :: Plan
+    { _idP       :: PlayerId
+    , _nameP     :: String
+    , _creditsP  :: Word32
+    , _goodsP    :: Goods
+    , _futuresP  :: Futures
+    , _planP     :: Plan
     }
   deriving Show
 
@@ -43,10 +51,10 @@ data PlayerId = PlayerA | PlayerB | PlayerC | PlayerD
 --
 data Goods
   = Goods
-    { foodG    :: Int32
-    , energyG  :: Int32
-    , metalG   :: Int32
-    , specialG :: Int32
+    { _foodG    :: Int32
+    , _energyG  :: Int32
+    , _metalG   :: Int32
+    , _specialG :: Int32
     }
   deriving Show
 
@@ -60,14 +68,14 @@ data Futures = Futures
 --
 data Plan
   = Plan
-    { fieldsP :: [TileIndex]      -- Tiles that the player wishes to aquire in this order of preference.
-    , routeP  :: [Action]         -- The actions that the player wishes to execute on tiles in this round.
+    { _fieldsP :: [TileIndex]      -- Tiles that the player wishes to aquire in this order of preference.
+    , _routeP  :: [PlayerAction]   -- The actions that the player wishes to execute on tiles in this round.
     }
   deriving Show
 
 -- The various actions that a player can take on a tile during the plan for one round.
 --
-data Action
+data PlayerAction
   = Survey  TileIndex             -- Surveying of a tile. Tile must not be owned by any player.
   | Build   TileIndex Facility    -- Build a facility on a tile. The executing player must be the tile owner.
   | SellOff TileIndex             -- Sell off a facility on a tile. The player must own the tile, which must have a facility.
@@ -80,9 +88,9 @@ type Tiles     = Array TileIndex Tile
 
 data Tile
   = Tile
-    { ownerT     :: Maybe PlayerId
-    , facilityT  :: Maybe Facility
-    , geoPropertyT :: GeoProperty
+    { _ownerT       :: Maybe PlayerId
+    , _facilityT    :: Maybe Facility
+    , _geoPropertyT :: GeoProperty
       -- FIXME: we need the type of tile it is (some are more suitable for some facilities than others)
       --        INSTEAD, we might want to store the immutable (during the game) part of the game state separately.
     }
@@ -99,20 +107,21 @@ data Facility
   | Factory
   deriving Show
 
-
+-- Geographic properties of tiles.
+--
 data GeoProperty 
   = GeoProperty 
-    { geographyGP :: Geography
-    , foodGP      :: YieldFactor
-    , energyGP    :: YieldFactor
-    , metalGP     :: YieldFactor
-    , specialGP   :: YieldFactor
+    { _geographyE :: Geography
+    , _foodE      :: YieldFactor
+    , _energyE    :: YieldFactor
+    , _metalE     :: YieldFactor
+    , _specialE   :: YieldFactor
     }
-    deriving (Show)
+  deriving (Show)
 
 type YieldFactor = Int -- 0 to 100
 
-data Geography = River | Mountain | Meadow | Dessert deriving (Show)
+data Geography = River | Mountain | Meadow | Desert deriving (Show)
 
 -- All players
 --
@@ -120,11 +129,11 @@ type Players = Array PlayerId Player
   
 data World
   = World
-    { playersW :: Players
-    , turnW    :: PlayerId
-    , tilesW   :: Tiles
-    , storageW :: Goods
-    , pricesW  :: Prices
+    { _playersW :: Players
+    , _turnW    :: PlayerId
+    , _tilesW   :: Tiles
+    , _storageW :: Goods
+    , _pricesW  :: Prices
     }
   deriving Show
 
@@ -132,28 +141,46 @@ data World
 --
 data Prices
   = Prices
-    { foodP    :: Word32
-    , energyP  :: Word32
-    , metalP   :: Word32
-    , specialP :: Word32
+    { _foodP    :: Word32
+    , _energyP  :: Word32
+    , _metalP   :: Word32
+    , _specialP :: Word32
     }
   deriving Show
 
-
+-- Natural events that affect the production of goods.
+--
 data NaturalEvent 
   = NaturalEvent 
-    { description  :: NaturalEventName
-    , foodEffectNE :: NaturalEventEffect
-    , energyNE     :: NaturalEventEffect
-    , metalNE      :: NaturalEventEffect
-    , specialNE    :: NaturalEventEffect
+    { _kindN    :: NaturalEventKind
+    , _foodN    :: NaturalEventEffect
+    , _energyN  :: NaturalEventEffect
+    , _metalN   :: NaturalEventEffect
+    , _specialN :: NaturalEventEffect
     }
+  deriving Show
 
-data NaturalEventName = Flood | EarthQuake -- ....
+data NaturalEventKind = Flood | EarthQuake deriving Show -- ....
 
--- a function which, given the location of a particular
--- tile, determines the way the event alters a yieldfactor
+-- Compute the factor by which a tiles yield changes in dependencs on a natural event and the tiles location.
+--
 type NaturalEventEffect =  World -> TileIndex -> YieldFactor -> YieldFactor   
+
+instance Show NaturalEventEffect where
+  show _ = "<natural event effect>"
+
+-- Make lenses for all record types.
+--
+makeLenses ''Player
+makeLenses ''Goods
+makeLenses ''Futures
+makeLenses ''Plan
+makeLenses ''Tile
+makeLenses ''GeoProperty
+makeLenses ''World
+makeLenses ''Prices
+makeLenses ''NaturalEvent
+
 
 -- Common values of game state components
 -- --------------------------------------
@@ -163,11 +190,11 @@ type NaturalEventEffect =  World -> TileIndex -> YieldFactor -> YieldFactor
 initialWorld :: World
 initialWorld 
   = World
-    { playersW = array playerBounds [(pid, initialPlayer pid (show pid)) | pid <- range playerBounds]
-    , turnW    = PlayerA
-    , tilesW   = initialTiles
-    , storageW = noGoods
-    , pricesW  = initialPrices
+    { _playersW = array playerBounds [(pid, initialPlayer pid (show pid)) | pid <- range playerBounds]
+    , _turnW    = PlayerA
+    , _tilesW   = initialTiles
+    , _storageW = noGoods
+    , _pricesW  = initialPrices
     }
 
 playerBounds :: (PlayerId, PlayerId)
@@ -176,12 +203,12 @@ playerBounds = (minBound, maxBound)
 initialPlayer :: PlayerId -> String -> Player
 initialPlayer playerId name
   = Player
-    { idP      = playerId
-    , nameP    = name
-    , creditsP = 100
-    , goodsP   = noGoods
-    , futuresP = noFutures
-    , planP    = noPlan
+    { _idP      = playerId
+    , _nameP    = name
+    , _creditsP = 100
+    , _goodsP   = noGoods
+    , _futuresP = noFutures
+    , _planP    = noPlan
     }
 
 noFutures :: Futures
@@ -201,10 +228,10 @@ initialTiles = listArray tileBounds (replicate 16 initialTile ++
                                      [playerBTile, playerDTile] ++ 
                                      repeat initialTile)
   where
-    playerATile = initialTile {ownerT = Just PlayerA}
-    playerBTile = initialTile {ownerT = Just PlayerB}
-    playerCTile = initialTile {ownerT = Just PlayerC}
-    playerDTile = initialTile {ownerT = Just PlayerD}
+    playerATile = ownerT .~ (Just PlayerA) $ initialTile
+    playerBTile = ownerT .~ (Just PlayerB) $ initialTile
+    playerCTile = ownerT .~ (Just PlayerC) $ initialTile
+    playerDTile = ownerT .~ (Just PlayerD) $ initialTile
 
 tileBounds :: (TileIndex, TileIndex)
 tileBounds = ((0, 0), (7, 4))

@@ -9,6 +9,7 @@ import Data.Array
 import System.IO.Unsafe (unsafePerformIO)
 
   -- libraries
+import Control.Lens
 import Graphics.Gloss
 
   -- friends
@@ -38,9 +39,9 @@ playerHUDWidth = tileSize * 2
 draw :: World -> IO Picture
 draw world 
   = return $ Pictures 
-             [ Translate 0 (hudHeight / 2)                      $ drawTiles (tilesW world)
+             [ Translate 0 (hudHeight / 2)                      $ drawTiles (world^.tilesW)
              , Translate 0 tileSize $ Scale (1/8) (1/8)         mothership
-             , Translate 0 (- screenHeight / 2 + hudHeight / 2) $ drawHUD (turnW world) (playersW world)
+             , Translate 0 (- screenHeight / 2 + hudHeight / 2) $ drawHUD (world^.turnW) (world^.playersW)
              ]
 
 drawTiles :: Tiles -> Picture
@@ -51,7 +52,7 @@ drawTile :: TileIndex -> Tile -> Picture
 drawTile tidx tile
   = (uncurry Translate) (tileIndexToPoint tidx) $ 
       Pictures
-      [ maybe Blank playerTint (ownerT tile)
+      [ maybe Blank playerTint (tile^.ownerT)
       , Color gridColour $ rectangleWire tileSize tileSize
       ]
   where
@@ -81,15 +82,15 @@ drawHUD turn players
 --
 drawPlayerHUD :: PlayerId -> Player -> Picture
 drawPlayerHUD turn (Player 
-                    { idP      = pid
-                    , nameP    = name
-                    , creditsP = credits
-                    , goodsP   = Goods 
-                                 { foodG    = food
-                                 , energyG  = energy
-                                 , metalG   = metal
-                                 , specialG = special
-                                 }
+                    { _idP      = pid
+                    , _nameP    = name
+                    , _creditsP = credits
+                    , _goodsP   = Goods 
+                                  { _foodG    = food
+                                  , _energyG  = energy
+                                  , _metalG   = metal
+                                  , _specialG = special
+                                  }
                     }) 
   = Pictures 
     [ Color (transparent $ playerColour pid) $
