@@ -4,9 +4,10 @@ module Turn (
   endOfTurn
 ) where
 
-
+import Data.Array
 import Data.List (partition, groupBy)
 import Control.Monad (liftM)
+import Data.Word
 
   -- friends
 import World
@@ -35,18 +36,30 @@ round world
   = do
     { putStrLn "next round"
     ; securedPlots <- resolvePlotBidding world
-    ; world'  <- foldM world executeTurn securedPlots
-    ; world'' <- worldStep world'
+    ; world <- purchasePlots world securedPlots
+    ; world <- executeActions world 
+    ; world <- worldStep world
     ; return world
     }
   
+-- assign plots to each player, reset fields in plan to empty list  
+purchasePlots :: World -> [(PlayerId, TileIndex)] -> IO World
+purchasePlots world playerTiles
+  = return $ world{tilesW = setTileOwners (tilesW world) playerTiles}
+  where
+    setTileOwners :: Tiles -> [(PlayerId, TileIndex)] -> Tiles  
+    setTileOwners tiles pts 
+      = tiles // [(tId, (tiles!tId){ownerT = Just pId}) | (pId, tId) <- pts] 
+
 -- Assign a plot to each player according to wish list, resolve conflicts
 -- randomly
 resolvePlotBidding :: World -> IO [(PlayerId, TileIndex)]  
 resolvePlotBidding world 
-  = error "resolvePlotBidding not implemented yet"
-  -- apply assignPlots to world, update world accordingly
-  where
+  = do 
+  	{ let choices = map (\(pId, p) -> (pId, fieldsP $ planP p)) $ assocs $ playersW world
+  	; assignPlots choices
+    }
+    where
   	-- return a list of players with their assigned plots, and a list of players who 
     -- lost out
     assignPlot :: [(PlayerId, TileIndex)] -> IO ([(PlayerId, TileIndex)], [PlayerId])
@@ -87,12 +100,40 @@ resolvePlotBidding world
           then (p1, tail pl1') : (zipPlots prs pls)
           else zipPlots p pls      
 
-executeTurn :: (PlayerId, TileIndex) -> World -> IO World
-executeTurn (playerId, tileId) world 
+
+-- No actual IO action in the prototype
+executeActions :: World -> IO World
+executeActions world 
   = do
-    { putStrLn $ (show playerId) ++" buys plot " ++ (show tileId)
+    { world <- foldM world executePlayerActions [PlayerA .. PlayerD]
     ; return world
     }  
+    where
+      executePlayerActions :: PlayerId -> World -> IO World
+      executePlayerActions pId world = do
+      	{ let actions =  routeP $ planP $ (playersW world)!pId
+      	; world <- foldM world (executePlayerAction pId) actions
+      	; return world
+        }
+
+      -- notifies a player of survey results on tile
+      executePlayerAction pId  (Survey tId) world 
+        = return world -- todo
+
+      executePlayerAction pId (Build tId fac)  world 
+        = do 
+          { addCredits world pId (-1 * (facilityCost world fac))
+          ; return world -- todo
+          }
+
+addCredits :: World -> PlayerId -> Word32 -> IO World
+addCredits world pId amount 
+  = return world -- todo
+
+
+-- Cost to install facility
+facilityCost :: World -> Facility -> Word32
+facilityCost _ _ = 0 -- todo
 
 -- Apply random world events, calculate field output
 worldStep :: World -> IO World

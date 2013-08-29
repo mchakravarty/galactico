@@ -3,7 +3,7 @@
 module World (
   Player(..), PlayerId(..), Goods(..), Futures(..), Plan(..), Action(..),
   TileIndex, Tiles, Tile(..), Players,
-  World(..), Prices(..),
+  World(..), Prices(..), Facility (..),
   initialWorld,
   playerBounds, tileBounds,
   noGoods
@@ -80,8 +80,9 @@ type Tiles     = Array TileIndex Tile
 
 data Tile
   = Tile
-    { ownerT    :: Maybe PlayerId
-    , facilityT :: Maybe Facility
+    { ownerT     :: Maybe PlayerId
+    , facilityT  :: Maybe Facility
+    , geoPropertyT :: GeoProperty
       -- FIXME: we need the type of tile it is (some are more suitable for some facilities than others)
       --        INSTEAD, we might want to store the immutable (during the game) part of the game state separately.
     }
@@ -97,6 +98,21 @@ data Facility
   | Mine
   | Factory
   deriving Show
+
+
+data GeoProperty 
+  = GeoProperty 
+    { geographyGP :: Geography
+    , foodGP      :: YieldFactor
+    , energyGP    :: YieldFactor
+    , metalGP     :: YieldFactor
+    , specialGP   :: YieldFactor
+    }
+    deriving (Show)
+
+type YieldFactor = Int -- 0 to 100
+
+data Geography = River | Mountain | Meadow | Dessert deriving (Show)
 
 -- All players
 --
@@ -123,6 +139,21 @@ data Prices
     }
   deriving Show
 
+
+data NaturalEvent 
+  = NaturalEvent 
+    { description  :: NaturalEventName
+    , foodEffectNE :: NaturalEventEffect
+    , energyNE     :: NaturalEventEffect
+    , metalNE      :: NaturalEventEffect
+    , specialNE    :: NaturalEventEffect
+    }
+
+data NaturalEventName = Flood | EarthQuake -- ....
+
+-- a function which, given the location of a particular
+-- tile, determines the way the event alters a yieldfactor
+type NaturalEventEffect =  World -> TileIndex -> YieldFactor -> YieldFactor   
 
 -- Common values of game state components
 -- --------------------------------------
@@ -162,6 +193,7 @@ noPlan = Plan [] []
 noGoods :: Goods
 noGoods = Goods 0 0 0 0
 
+-- todo: proper geography
 initialTiles :: Tiles
 initialTiles = listArray tileBounds (replicate 16 initialTile ++ 
                                      [playerATile, playerCTile] ++ 
@@ -179,7 +211,7 @@ tileBounds = ((0, 0), (7, 4))
 
 initialTile :: Tile
 initialTile
-  = Tile Nothing Nothing
+  = Tile Nothing Nothing (GeoProperty Meadow 0 0 0 0)
 
 initialPrices :: Prices
 initialPrices = Prices 10 10 10 10
