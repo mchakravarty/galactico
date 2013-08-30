@@ -8,9 +8,10 @@ module Step (
 import Graphics.Gloss
 
   -- friends
+import ViewState
 import World
 
 
-step :: Float -> World -> IO World
-step timeS world = return world
+step :: Float -> State -> IO State
+step timeS state = return state
 

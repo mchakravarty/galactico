@@ -5,14 +5,16 @@ module Events (
 ) where
 
   -- libraries
+import Control.Lens
 import Graphics.Gloss
 import Graphics.Gloss.Interface.IO.Game
 
   -- friends
 import Turn
+import ViewState
 import World
 
 
-events :: Event -> World -> IO World
-events (EventKey (SpecialKey KeyEnter) Down _ _) world = endOfTurn world
-events _                                         world = return world
+events :: Event -> State -> IO State
+events (EventKey (SpecialKey KeyEnter) Down _ _) state = return $ worldS %~ endOfTurn $ state
+events _                                         state = return state

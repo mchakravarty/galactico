@@ -13,6 +13,7 @@ import Control.Lens
 import Graphics.Gloss
 
   -- friends
+import ViewState
 import World
 
 
@@ -36,8 +37,8 @@ playerHUDWidth = tileSize * 2
 -- Drawing
 -- -------
 
-draw :: World -> IO Picture
-draw world 
+draw :: State -> IO Picture
+draw (State {_worldS = world, _tilesS = tileSel})
   = return $ Pictures 
              [ Translate 0 (hudHeight / 2)                      $ drawTiles (world^.tilesW)
              , Translate 0 tileSize $ Scale (1/8) (1/8)         mothership

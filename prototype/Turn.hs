@@ -23,14 +23,12 @@ import Prelude hiding (round)
 -- Turn progression
 -- ----------------
 
-endOfTurn :: World -> IO World
-endOfTurn world@(World {_turnW = PlayerA}) = return $ world {_turnW = PlayerB}
-endOfTurn world@(World {_turnW = PlayerB}) = return $ world {_turnW = PlayerC}
-endOfTurn world@(World {_turnW = PlayerC}) = return $ world {_turnW = PlayerD}
-endOfTurn world@(World {_turnW = PlayerD}) 
-  = do { putStrLn "End of round"
-       ; return $ execState endOfRound world {_turnW = PlayerA}
-       }
+endOfTurn :: World -> World
+endOfTurn world@(World {_turnW = PlayerA}) = world {_turnW = PlayerB}
+endOfTurn world@(World {_turnW = PlayerB}) = world {_turnW = PlayerC}
+endOfTurn world@(World {_turnW = PlayerC}) = world {_turnW = PlayerD}
+endOfTurn world@(World {_turnW = PlayerD}) = execState endOfRound world {_turnW = PlayerA}
+
 
 -- Round progression
 -- -----------------
