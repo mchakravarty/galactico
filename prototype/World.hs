@@ -1,18 +1,26 @@
 {-# LANGUAGE TemplateHaskell, Rank2Types, NoMonomorphismRestriction #-}
 {-# LANGUAGE TypeSynonymInstances, FlexibleInstances #-}
 
--- Data structures encoding the state of the world.
+-- Data structures encoding the state of the game world.
 
-module World
-{- (
-  Player(..), PlayerId(..), Goods(..), Futures(..), Plan(..), PlayerAction(..),
-  TileIndex, Tiles, Tile(..), Players,
-  World(..), Prices(..), Facility (..),
+module World (
+  Player(..), idP, nameP, creditsP, goodsP, futuresP, planP,
+  PlayerId(..), 
+  Goods(..), foodG, energyG, metalG, specialG,
+  Futures(..), 
+  Plan(..), fieldsP, routeP,
+  PlayerAction(..),
+  TileIndex, Tiles, Tile(..), ownerT, facilityT, geoPropertyT,
+  Facility (..),
+  GeoProperty(..), geographyE, foodE, energyE, metalE, specialE,
+  Players,
+  World(..), playersW, turnW, tilesW, storageW, pricesW,
+  Prices(..), foodP, energyP, metalP, specialP,
+  NaturalEvent(..), NaturalEventKind(..), NaturalEventEffect, kindN, foodN, energyN, metalN, specialN,
   initialWorld,
   playerBounds, tileBounds,
   noGoods
-) -} where
-  -- FIXME: make an explicit list including lenses
+) where
 
   -- standard library
 import Data.Array
