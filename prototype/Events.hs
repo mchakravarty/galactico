@@ -15,6 +15,6 @@ import ViewState
 import World
 
 
-events :: Event -> State -> IO State
-events (EventKey (SpecialKey KeyEnter) Down _ _) state = return $ worldS %~ endOfTurn $ state
+events :: Event -> ViewState -> IO ViewState
+events (EventKey (SpecialKey KeyEnter) Down _ _) state = return $ worldV %~ endOfTurn $ state
 events _                                         state = return state

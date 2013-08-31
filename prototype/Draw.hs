@@ -37,35 +37,37 @@ playerHUDWidth = tileSize * 2
 -- Drawing
 -- -------
 
-draw :: State -> IO Picture
-draw (State {_worldS = world, _tilesS = tileSel})
+draw :: ViewState -> IO Picture
+draw (ViewState {_worldV = world, _tilesV = tileSel})
   = return $ Pictures 
-             [ Translate 0 (hudHeight / 2)                      $ drawTiles (world^.tilesW)
+             [ Translate 0 (hudHeight / 2)                      $ drawTiles (world^.tilesW) tileSel
              , Translate 0 tileSize $ Scale (1/8) (1/8)         mothership
              , Translate 0 (- screenHeight / 2 + hudHeight / 2) $ drawHUD (world^.turnW) (world^.playersW)
              ]
 
-drawTiles :: Tiles -> Picture
-drawTiles tiles 
+drawTiles :: Tiles -> TileSelection -> Picture
+drawTiles tiles tileSel
   = Pictures [drawTile tidx (tiles!tidx) | tidx <- range tileBounds]
-
-drawTile :: TileIndex -> Tile -> Picture
-drawTile tidx tile
-  = (uncurry Translate) (tileIndexToPoint tidx) $ 
-      Pictures
-      [ maybe Blank playerTint (tile^.ownerT)
-      , Color gridColour $ rectangleWire tileSize tileSize
-      ]
   where
-    playerTint pid = Color (verytransparent $ playerColour pid) $ rectangleSolid tileSize tileSize
+    drawTile :: TileIndex -> Tile -> Picture
+    drawTile tidx tile
+      = (uncurry Translate) (tileIndexToPoint tidx) $ 
+          Pictures
+          [ maybe Blank playerTint (tile^.ownerT)
+          , if tileSel^.isVisibleS && tidx `elem` tileSel^.indicesS then selTint (tileSel^.colourS) else Blank
+          , Color gridColour $ rectangleWire tileSize tileSize
+          ]
+      where
+        playerTint pid = Color (verytransparent $ playerColour pid) $ rectangleSolid tileSize tileSize
+        selTint    col = Color (verytransparent col)                $ rectangleSolid tileSize tileSize
 
-tileIndexToPoint :: TileIndex -> Point
-tileIndexToPoint (i, j) = (fromIntegral i * tileSize - tilesWidth / 2 + 0.5, 
-                           tilesHeight / 2 - fromIntegral j * tileSize + 0.5)
-  where
-    tilesWidth                     = tileSize * fromIntegral horMaxTile
-    tilesHeight                    = tileSize * fromIntegral vertMaxTile
-    (_, (horMaxTile, vertMaxTile)) = tileBounds
+    tileIndexToPoint :: TileIndex -> Point
+    tileIndexToPoint (i, j) = (fromIntegral i * tileSize - tilesWidth / 2 + 0.5, 
+                               tilesHeight / 2 - fromIntegral j * tileSize + 0.5)
+      where
+        tilesWidth                     = tileSize * fromIntegral horMaxTile
+        tilesHeight                    = tileSize * fromIntegral vertMaxTile
+        (_, (horMaxTile, vertMaxTile)) = tileBounds
 
 -- The first argument is the player whose turn it is.
 --

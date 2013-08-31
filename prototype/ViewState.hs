@@ -3,8 +3,8 @@
 -- Data structures encoding the UI state.
 
 module ViewState (
-  State(..), worldS, tilesS,
-  TileSelection(..), indicesS, colourS,
+  ViewState(..), worldV, tilesV,
+  TileSelection(..), indicesS, colourS, isVisibleS, delayS,
   initialState, emptyTileSelection
 ) where
 
@@ -21,21 +21,23 @@ import World
 
 -- The overall view state including the game world state.
 --
-data State 
-  = State
-    { _worldS :: World
-    , _tilesS :: TileSelection
+data ViewState 
+  = ViewState
+    { _worldV :: World
+    , _tilesV :: TileSelection
     }
 
 -- A set of selected tiles and the colour used to highlight them.
 --
 data TileSelection
   = TileSelection
-    { _indicesS :: [TileIndex]
-    , _colourS  :: Color
+    { _indicesS   :: [TileIndex]
+    , _colourS    :: Color
+    , _isVisibleS :: Bool
+    , _delayS     :: Float          -- time until visibility gets toggled
     }
 
-makeLenses ''State
+makeLenses ''ViewState
 makeLenses ''TileSelection
 
 
@@ -44,10 +46,10 @@ makeLenses ''TileSelection
 
 -- Initial overall state
 --
-initialState :: State
-initialState = State initialWorld emptyTileSelection
+initialState :: ViewState
+initialState = ViewState initialWorld emptyTileSelection
 
 -- An empty selection
 --
 emptyTileSelection :: TileSelection
-emptyTileSelection = TileSelection [] white
+emptyTileSelection = TileSelection [(0, 0)] black True 0.5
