@@ -1,11 +1,14 @@
 -- Gloss drawing functions.
 
 module Draw (
-  draw
+  draw, 
+  UIElement(..), uielement
 ) where
 
   -- standard libraries
 import Data.Array
+import Data.List
+import Data.Maybe
 import System.IO.Unsafe (unsafePerformIO)
 
   -- libraries
@@ -54,20 +57,20 @@ drawTiles tiles tileSel
       = (uncurry Translate) (tileIndexToPoint tidx) $ 
           Pictures
           [ maybe Blank playerTint (tile^.ownerT)
-          , if tileSel^.isVisibleS && tidx `elem` tileSel^.indicesS then selTint (tileSel^.colourS) else Blank
+          , if tileSel^.isVisibleS && isJust eidx then selTint (tileSel^.colourS) else Blank
           , Color gridColour $ rectangleWire tileSize tileSize
           ]
       where
-        playerTint pid = Color (verytransparent $ playerColour pid) $ rectangleSolid tileSize tileSize
-        selTint    col = Color (verytransparent col)                $ rectangleSolid tileSize tileSize
-
-    tileIndexToPoint :: TileIndex -> Point
-    tileIndexToPoint (i, j) = (fromIntegral i * tileSize - tilesWidth / 2 + 0.5, 
-                               tilesHeight / 2 - fromIntegral j * tileSize + 0.5)
-      where
-        tilesWidth                     = tileSize * fromIntegral horMaxTile
-        tilesHeight                    = tileSize * fromIntegral vertMaxTile
-        (_, (horMaxTile, vertMaxTile)) = tileBounds
+        eidx = tidx `elemIndex` (tileSel^.indicesS)
+        
+        playerTint pid = Color (veryTransparent $ playerColour pid) $ rectangleSolid tileSize tileSize
+        selTint    col = Pictures 
+                         [ Color (veryTransparent col) $ rectangleSolid tileSize tileSize
+                         , Color (mostlyOpaque col)    $ 
+                             Translate (- tileSize / 2 + 5) (- tileSize / 2 + 5) $
+                               Scale 0.2 0.2 $
+                                 Text $ show (fromJust eidx + 1)
+                         ]
 
 -- The first argument is the player whose turn it is.
 --
@@ -112,6 +115,53 @@ drawPlayerHUD turn (Player
                     ]
 
 
+-- Interactions
+-- ------------
+
+-- UI elements in the interface.
+--
+data UIElement = HUD
+               | Map TileIndex
+
+-- Determine the UI element at the given position.
+--
+uielement :: Point -> Maybe UIElement
+uielement (x, y)
+  | y >= screenHeight / 2 || y < -screenHeight / 2 
+  = Nothing
+  | y < (- screenHeight / 2 + hudHeight)
+  = Just HUD
+  | otherwise
+  = Just $ Map $ pointToTileIndex (x, y - hudHeight / 2)
+
+
+-- Layout
+-- ------
+
+-- The extent of the tiled map.
+--
+tilesWidth, tilesHeight :: Float
+(tilesWidth, tilesHeight) = (tileSize * fromIntegral horMaxTile, tileSize * fromIntegral vertMaxTile)
+  where
+    (_, (horMaxTile, vertMaxTile)) = tileBounds
+
+-- Determine the location of a tile on the map.
+--
+tileIndexToPoint :: TileIndex -> Point
+tileIndexToPoint (i, j) = (fromIntegral i * tileSize - tilesWidth / 2 + 0.5, 
+                           tilesHeight / 2 - fromIntegral j * tileSize + 0.5)
+  where
+    tilesWidth                     = tileSize * fromIntegral horMaxTile
+    tilesHeight                    = tileSize * fromIntegral vertMaxTile
+    (_, (horMaxTile, vertMaxTile)) = tileBounds
+
+-- Determine the tile at a particular location.
+--
+pointToTileIndex :: Point -> TileIndex
+pointToTileIndex (x, y) = (round $   (x - 0.5 + tilesWidth  / 2) / tileSize,
+                           round $ - (y - 0.5 - tilesHeight / 2) / tileSize)
+
+
 -- Colours
 -- -------
 
@@ -124,13 +174,18 @@ playerColour PlayerB = dark violet
 playerColour PlayerC = dark aquamarine
 playerColour PlayerD = dark orange
 
+mostlyOpaque :: Color -> Color
+mostlyOpaque col = makeColor r g b 0.7
+  where
+    (r, g, b, _a) = rgbaOfColor col
+
 transparent :: Color -> Color
 transparent col = makeColor r g b 0.1
   where
     (r, g, b, _a) = rgbaOfColor col
 
-verytransparent :: Color -> Color
-verytransparent col = makeColor r g b 0.05
+veryTransparent :: Color -> Color
+veryTransparent col = makeColor r g b 0.05
   where
     (r, g, b, _a) = rgbaOfColor col
 
