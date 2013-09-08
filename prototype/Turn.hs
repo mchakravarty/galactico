@@ -1,7 +1,7 @@
 -- Manage player turns and round-based world progress.
 
 module Turn (
-  endOfTurn
+  endOfTurn, startTurnOf
 ) where
 
   -- standard libraries
@@ -16,6 +16,8 @@ import Control.Lens
 import Control.Monad.Trans.State
 
   -- friends
+import Draw
+import ViewState
 import World
 import Prelude hiding (round)
 
@@ -23,11 +25,53 @@ import Prelude hiding (round)
 -- Turn progression
 -- ----------------
 
-endOfTurn :: World -> World
-endOfTurn world@(World {_turnW = PlayerA}) = world {_turnW = PlayerB}
-endOfTurn world@(World {_turnW = PlayerB}) = world {_turnW = PlayerC}
-endOfTurn world@(World {_turnW = PlayerC}) = world {_turnW = PlayerD}
-endOfTurn world@(World {_turnW = PlayerD}) = execState endOfRound world {_turnW = PlayerA}
+type StateM = State ViewState
+
+-- A player finished their turn. If it was the last player in a round, finish the round. 
+--
+endOfTurn :: StateM ()
+endOfTurn
+  = do
+    { state <- get 
+    
+        -- The current tile selection becomes the current player's bidding plan.
+    ; worldV.playersW.player(state^.worldV^.turnW).planP.fieldsP .= state^.tilesV^.indicesS
+    
+        -- If the current player is the last player of that round, finalise the round.
+    ; when (state^.worldV.turnW == PlayerD) $
+        worldV %= execState endOfRound
+        
+        -- Determine the player whose turn is next, and start that turn.
+    ; newTurn <- worldV.turnW <%= nextPlayer
+    ; startTurnOf newTurn
+    }
+  where
+    nextPlayer PlayerA = PlayerB
+    nextPlayer PlayerB = PlayerC
+    nextPlayer PlayerC = PlayerD
+    nextPlayer PlayerD = PlayerA
+    
+    player = element . Data.Array.index playerBounds
+
+-- Set the view state and world up for a new turn by the given player.
+--
+startTurnOf :: PlayerId -> StateM ()
+startTurnOf newTurn
+  = startBiddingTileSelection newTurn
+
+-- Set up the view state for the tile bidding selection of the given player.
+--
+startBiddingTileSelection :: PlayerId -> StateM ()
+startBiddingTileSelection pid
+  = do
+    { state <- get
+    ; tilesV         .= emptyTileSelection 
+    ; tilesV.colourS .= playerColour pid
+    ; tilesV.validS  .= biddingTilesForPlayer [tidx | (tidx, Tile {_ownerT = Just _}) <- assocs $ state^.worldV^.tilesW]
+                                              -- tiles with an owner are off limits
+    }
+  where
+    biddingTilesForPlayer offLimits tiles tix = length tiles < 4 && tix `notElem` offLimits
 
 
 -- Round progression

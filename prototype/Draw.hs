@@ -2,7 +2,8 @@
 
 module Draw (
   draw, 
-  UIElement(..), uielement
+  UIElement(..), uielement,
+  playerColour
 ) where
 
   -- standard libraries

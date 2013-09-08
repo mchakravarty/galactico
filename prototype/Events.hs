@@ -6,6 +6,7 @@ module Events (
 
   -- libraries
 import Control.Lens
+import Control.Monad.Trans.State
 import Graphics.Gloss
 import Graphics.Gloss.Interface.IO.Game
 
@@ -15,13 +16,20 @@ import ViewState
 import World
 
 
-events :: Event -> ViewState -> IO ViewState
-events (EventKey (SpecialKey KeyEnter) Down   _ pos) state = return
-                                                               $ worldV %~ endOfTurn
-                                                               $ posV   .~ pos
-                                                               $ state
-events (EventKey key                   upDown _ pos) state = return
-                                                               $ keysV.contains key .~ (upDown == Down)
-                                                               $ posV               .~ pos
-                                                               $ state
-events _                                             state = return state
+-- Gloss event processing
+-- ----------------------
+
+type StateM = State ViewState
+
+-- Process a single Gloss event
+--
+events :: Event -> StateM ()
+events (EventKey (SpecialKey KeyEnter) Down   _ pos) = do
+                                                       { posV .= pos
+                                                       ; endOfTurn
+                                                       }
+events (EventKey key                   upDown _ pos) = do
+                                                       { keysV.contains key .= (upDown == Down)
+                                                       ; posV               .= pos
+                                                       }
+events _                                             = return ()

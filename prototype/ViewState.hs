@@ -10,7 +10,6 @@ module ViewState (
 
   -- libraries
 import Control.Lens
-import Data.List
 import Data.Set
 import Graphics.Gloss
 import Graphics.Gloss.Interface.IO.Game
@@ -39,8 +38,8 @@ data TileSelection
     { _indicesS   :: [TileIndex]
     , _colourS    :: Color
     , _isVisibleS :: Bool
-    , _delayS     :: Float              -- time until visibility gets toggled
-    , _validS     :: TileIndex -> Bool  -- whether a given tile may be select
+    , _delayS     :: Float                             -- time until visibility gets toggled
+    , _validS     :: [TileIndex] -> TileIndex -> Bool  -- whether a given tile may be added to the given selection
     }
 
 makeLenses ''ViewState
@@ -58,4 +57,4 @@ initialState = ViewState initialWorld emptyTileSelection empty (0, 0)
 -- An empty selection
 --
 emptyTileSelection :: TileSelection
-emptyTileSelection = TileSelection [(0, 0)] black True 0.5 (const True)
+emptyTileSelection = TileSelection [] black True 0.5 (\_ _ -> True)

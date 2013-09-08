@@ -82,8 +82,9 @@ selectTile :: Maybe Int -> TileIndex -> StateM ()
 selectTile eidx tidx
   = do
     { state <- get
-    ; let eidx' = maybe (length $ state^.tilesV^.indicesS) id eidx
-    ; when (tidx `notElem` state^.tilesV^.indicesS && (state^.tilesV^.validS) tidx) $
+    ; let tiles = state^.tilesV^.indicesS
+          eidx' = maybe (length tiles) id eidx
+    ; when (tidx `notElem` state^.tilesV^.indicesS && (state^.tilesV^.validS) tiles tidx) $
         tilesV.indicesS %= insertAt eidx' tidx
     }
 

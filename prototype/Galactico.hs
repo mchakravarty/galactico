@@ -1,4 +1,5 @@
-  -- packages
+  -- libraries
+import Control.Monad.Trans.State
 import Graphics.Gloss
 import Graphics.Gloss.Interface.IO.Game
 
@@ -8,6 +9,7 @@ import Events
 import ViewState
 import ViewState
 import Step
+import Turn
 import World
 
 main :: IO ()
@@ -16,7 +18,10 @@ main
       (InWindow "Galactico" (1024, 768) (100, 100))
       white
       30
-      initialState
+      initialiseGame
       draw
-      events
+      handleEvents
       step
+  where
+    initialiseGame     = execState (startTurnOf PlayerA) initialState
+    handleEvents event = return . execState (events event)
