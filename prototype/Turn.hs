@@ -98,12 +98,17 @@ purchasePlots :: [(PlayerId, TileIndex)] -> WorldM ()
 purchasePlots playerTiles
   = do
     { tilesW %= setTileOwners playerTiles
+    ; mapMOf_ (traverse._2) removeTile playerTiles
     }
   where
     setTileOwners :: [(PlayerId, TileIndex)] -> Tiles -> Tiles  
     setTileOwners pts tiles
       = tiles // [(tId, (tiles!tId){_ownerT = Just pId}) | (pId, tId) <- pts] 
 --    = tiles // [(tId, ownerT .~ Just pId $ tiles!tId) | (pId, tId) <- pts]  -- the lens way of writing the same
+
+    removeTile tidx = playersW %= (traverse %~ remove)
+      where
+        remove = planP.fieldsP %~ filter (/= tidx)
 
 -- Assign a plot to each player according to their wish list; resolve conflicts randomly.
 --
