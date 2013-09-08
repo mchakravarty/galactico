@@ -1,5 +1,5 @@
 {-# LANGUAGE TemplateHaskell, Rank2Types, NoMonomorphismRestriction #-}
-{-# LANGUAGE TypeSynonymInstances, FlexibleInstances #-}
+{-# LANGUAGE TypeSynonymInstances, FlexibleInstances, FlexibleContexts #-}
 
 -- Data structures encoding the state of the game world.
 
@@ -13,7 +13,7 @@ module World (
   TileIndex, Tiles, Tile(..), ownerT, facilityT, geoPropertyT,
   Facility (..),
   GeoProperty(..), geographyE, foodE, energyE, metalE, specialE,
-  Players,
+  Players, player,
   World(..), playersW, turnW, tilesW, storageW, pricesW,
   Prices(..), foodP, energyP, metalP, specialP,
   NaturalEvent(..), NaturalEventKind(..), NaturalEventEffect, kindN, foodN, energyN, metalN, specialN,
@@ -134,7 +134,7 @@ data Geography = River | Mountain | Meadow | Desert deriving (Show)
 -- All players
 --
 type Players = Array PlayerId Player
-  
+
 data World
   = World
     { _playersW :: Players
@@ -188,6 +188,10 @@ makeLenses ''GeoProperty
 makeLenses ''World
 makeLenses ''Prices
 makeLenses ''NaturalEvent
+
+player :: PlayerId -> IndexedTraversal' Int Players Player
+player = element . Data.Array.index playerBounds
+
 
 
 -- Common values of game state components

@@ -10,6 +10,7 @@ import Control.Monad
 import Data.Array
 import Data.List
 import Data.Word
+import qualified Debug.Trace as Trace
 
   -- libraries
 import Control.Lens
@@ -51,8 +52,6 @@ endOfTurn
     nextPlayer PlayerC = PlayerD
     nextPlayer PlayerD = PlayerA
     
-    player = element . Data.Array.index playerBounds
-
 -- Set the view state and world up for a new turn by the given player.
 --
 startTurnOf :: PlayerId -> StateM ()
@@ -65,10 +64,11 @@ startBiddingTileSelection :: PlayerId -> StateM ()
 startBiddingTileSelection pid
   = do
     { state <- get
-    ; tilesV         .= emptyTileSelection 
-    ; tilesV.colourS .= playerColour pid
-    ; tilesV.validS  .= biddingTilesForPlayer [tidx | (tidx, Tile {_ownerT = Just _}) <- assocs $ state^.worldV^.tilesW]
-                                              -- tiles with an owner are off limits
+    ; tilesV          .= emptyTileSelection 
+    ; tilesV.indicesS .= state^.worldV^.playersW^.player(state^.worldV^.turnW).planP.fieldsP
+    ; tilesV.colourS  .= playerColour pid
+    ; tilesV.validS   .= biddingTilesForPlayer [tidx | (tidx, Tile {_ownerT = Just _}) <- assocs $ state^.worldV^.tilesW]
+                                               -- tiles with an owner are off limits
     }
   where
     biddingTilesForPlayer offLimits tiles tix = length tiles < 4 && tix `notElem` offLimits
@@ -84,7 +84,9 @@ type WorldM = State World
 endOfRound :: WorldM ()
 endOfRound
   = do
-    { securedPlots <- resolvePlotBidding
+    { trace "Plot bidding..."
+    ; securedPlots <- resolvePlotBidding
+    ; trace $ "...bidding result: " ++ show securedPlots
     ; purchasePlots securedPlots
     ; executeActions
     ; worldStep
@@ -94,7 +96,9 @@ endOfRound
 --
 purchasePlots :: [(PlayerId, TileIndex)] -> WorldM ()
 purchasePlots playerTiles
-  = tilesW %= setTileOwners playerTiles
+  = do
+    { tilesW %= setTileOwners playerTiles
+    }
   where
     setTileOwners :: [(PlayerId, TileIndex)] -> Tiles -> Tiles  
     setTileOwners pts tiles
@@ -107,7 +111,7 @@ resolvePlotBidding :: WorldM [(PlayerId, TileIndex)]
 resolvePlotBidding
   = do 
     { players <- use playersW
-    ; let choices = map (\(pId, p) -> (pId, p^.planP^.fieldsP)) $ assocs $ players
+    ; let choices = over (mapped._2) (\p -> p^.planP^.fieldsP) $ assocs $ players
     ; assignPlots choices
     }
     where
@@ -115,11 +119,11 @@ resolvePlotBidding
     -- lost out.
     assignPlot :: [(PlayerId, TileIndex)] -> WorldM ([(PlayerId, TileIndex)], [PlayerId])
     assignPlot choices = do 
-      { let groupChoices = groupBy (\a -> \b -> snd a == snd b) choices
-      ; let (noConflicts, conflicts)  = partition ((==1) . length) groupChoices
+      { let groupChoices = groupBy (\a b -> snd a == snd b) . sortBy (\a b -> snd a `compare` snd b) $ choices
+            (noConflicts, conflicts) = partition ((==1) . length) groupChoices
       ; (winners, losers) <- unzip <$> (mapM chooseRandom $ map (map fst) conflicts)
-      ; let winnerPlots = zipWith (\w -> \g -> (w, snd $ head' g)) winners conflicts
-      ; return (winnerPlots, concat losers)
+      ; let winnerPlots = zipWith (\w g -> (w, snd $ head' g)) winners conflicts
+      ; return (concat noConflicts ++ winnerPlots, concat losers)
       }
 
     head' :: [(PlayerId, TileIndex)] -> (PlayerId, TileIndex)
@@ -187,3 +191,13 @@ facilityCost _ = return 0 -- todo
 --
 worldStep :: WorldM ()
 worldStep = return ()
+
+
+-- Debugging
+-- ---------
+
+trace :: String -> WorldM ()
+trace msg = Trace.trace msg $ return ()
+
+traceShow :: Show a => a -> WorldM ()
+traceShow v = Trace.traceShow v $ return ()
